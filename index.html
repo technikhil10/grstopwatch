@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stopwatch | Javascript Stopwatch</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css">
+    <style>
+        .jumbotron{
+            background-color: #f47d78 ;
+            color: white;
+            transition: 0.8s ease all;
+
+        }
+        .container{
+            margin-top: 5rem;
+        }
+        .numbers{
+            font-size: 12vh;
+        }
+        a{
+            text-decoration: underline;
+            font-family:Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+            color: black;
+        }
+        footer{
+            position: fixed;
+            left: 0;
+            bottom: 0;
+            width: 100%;
+            text-align: center;
+            padding: 5px 0;
+        }
+    </style>
+</head>
+<body>
+
+    
+   <div class="container">
+    <div class="jumbotron text-center">
+        <div class="numbers">
+            <span class="minutes">00</span> : <span class="seconds">00</span>
+        </div>
+
+        <button class="btn btn-lg btn-success" data-action="start">Start</button>
+        <button class="btn btn-lg btn-danger" data-action="stop">Stop</button>
+        <button class="btn btn-link btn-block" data-action="reset">Reset</button>
+    </div> 
+  </div>
+  <footer class="text-center bg-light">
+    Made with 💖 by <a href="https://twitter.com/Tech_Nikkhil">Nikhil</a>
+</footer>     
+        <!------------------------------------------------ Javascript begins ---------------------------------------------->
+        <script>
+            //grab elements
+            const minutes = document.querySelector('.minutes')
+            const seconds = document.querySelector('.seconds')
+            const start = document.querySelector('[data-action="start"]')
+            const stop = document.querySelector('[data-action="stop"]')
+            const reset = document.querySelector('[data-action="reset"]')
+            const jumbotron = document.querySelector('.jumbotron')
+            let timerTime = 00;
+            let isRunning = false
+            let timerInterval;  //this is interval variable for timer
+            let gradientInterval; //this is for gradient change 
+            //create functions
+
+
+            function incrementTimer(){
+                timerTime++
+
+                noOfMinutes = Math.floor(timerTime/60);
+                noOfSeconds = timerTime%60
+
+                minutes.textContent = padding(noOfMinutes)
+                seconds.textContent = padding(noOfSeconds)
+            
+            }
+
+            //function to generate random integer between range
+
+            const randomInt = (min,max) => Math.trunc(Math.random() * (max+ min -1) + min)
+            //background-changer function
+            const bgChanger = () => {
+                jumbotron.style.backgroundImage =  `linear-gradient(45deg, rgba(${randomInt(0,255)},${randomInt(0,255)},${randomInt(0,255)},1) 0%, rgba(${randomInt(0,255)},${randomInt(0,255)},${randomInt(0,255)},1) 79%)`
+            }
+            
+           
+           
+
+            //function to start timer
+            function startTimer(){
+                if(isRunning) return
+
+                isRunning =true
+                timerInterval = setInterval(incrementTimer,1000)
+                gradientInterval =  setInterval(bgChanger,randomInt(0,5000))
+                }
+
+
+            //function to stop timer
+            function stopTimer(){
+                if(!isRunning) return
+
+               
+                isRunning = false
+                jumbotron.style.background = 'black'
+                clearInterval(timerInterval)
+                clearInterval(gradientInterval)
+            }
+
+            //function to reset timer
+            function resetTimer(){
+                jumbotron.style.background = '#f47d78'
+                timerTime = 0
+                clearInterval(timerInterval)
+                clearInterval(gradientInterval)
+                minutes.textContent ='00'
+                seconds.textContent = '00'
+            }
+
+            //function to add padding zeroes to timer if single digit is present e.g instead of showing 1 show 01
+            function padding(number){
+               return number < 10 ? '0' + number : number
+            }
+
+            //addeventlisteners
+            start.addEventListener('click',startTimer)
+            stop.addEventListener('click',stopTimer)
+            reset.addEventListener('click',resetTimer)
+
+        </script>
+</body>
+</html>
